@@ -9,12 +9,23 @@ Cách chạy:
     python weather_function_calling.py
 """
 
+import os
+from pathlib import Path
+import sys
+import unicodedata
+if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+load_dotenv()
+
 from google import genai
 from google.genai import types
 
 client = genai.Client()
 
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-3.5-flash-lite"
 
 SYSTEM_INSTRUCTION = (
     "Bạn là trợ lý thời tiết thân thiện, trả lời bằng tiếng Việt tự nhiên. "
@@ -66,8 +77,13 @@ def get_weather(city: str) -> str:
     }
     import json
 
+    def normalize(value):
+        return "".join(c for c in unicodedata.normalize("NFD", value.lower().replace("đ", "d"))
+                       if not unicodedata.combining(c) and c.isalnum())
+    aliases = {normalize(name): data for name, data in mock_data.items()}
+    aliases.update({"hanoi": mock_data["Hà Nội"], "danang": mock_data["Đà Nẵng"]})
     default = {"nhiệt_độ": "28°C", "thời_tiết": "không có dữ liệu chi tiết"}
-    return json.dumps({"city": city, **mock_data.get(city, default)}, ensure_ascii=False)
+    return json.dumps({"city": city, **aliases.get(normalize(city), default)}, ensure_ascii=False)
 
 
 def run(prompt: str) -> str:
@@ -87,14 +103,23 @@ def run(prompt: str) -> str:
     )
 
     # 4. Vòng lặp: nếu model yêu cầu tool, app TỰ THỰC THI rồi đưa kết quả trả lại
+    rounds = 0
     while resp.function_calls:
+        rounds += 1
+        if rounds > 8:
+            raise RuntimeError("Model exceeded 8 tool rounds")
+        if not resp.candidates or not resp.candidates[0].content:
+            raise RuntimeError("Model returned no content for tool call")
         # Thêm phản hồi của model vào lịch sử hội thoại
         contents.append(resp.candidates[0].content)
 
         function_responses = []
         for fc in resp.function_calls:
             print(f"  [model yêu cầu] {fc.name}({fc.args})")
-            result = get_weather(**fc.args)  # <-- app chạy, không phải model
+            args = fc.args or {}
+            if fc.name != "get_weather" or set(args) != {"city"} or not isinstance(args["city"], str):
+                raise ValueError("Invalid tool name or city arguments")
+            result = get_weather(**args)  # <-- app chạy, không phải model
             print(f"  [app thực thi]  -> {result}")
             function_responses.append(
                 types.Part.from_function_response(
@@ -114,6 +139,8 @@ def run(prompt: str) -> str:
         )
 
     # 5. Model tổng hợp câu trả lời cuối
+    if not resp.text:
+        raise RuntimeError("Model returned no final text")
     return resp.text
 
 

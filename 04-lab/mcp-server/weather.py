@@ -2,6 +2,24 @@ from typing import Any
 import asyncio
 import httpx
 import os
+from pathlib import Path
+import sys
+import logging
+
+# httpx INFO logs include query strings containing the WeatherAPI key.
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
+if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parent / ".env")
+    load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
+    load_dotenv()
+except ImportError:
+    pass
+
 from mcp.server.fastmcp import FastMCP
 
 # Initialize FastMCP server
@@ -19,7 +37,7 @@ async def make_weather_request(endpoint: str, params: dict[str, str]) -> dict[st
     """Make a request to the WeatherAPI with proper error handling."""
     # Check if API key is set
     if not API_KEY:
-        print("ERROR: WeatherAPI key not set. Please set WEATHERAPI_KEY environment variable.")
+        print("ERROR: WeatherAPI key not set.", file=sys.stderr)
         return None
         
     headers = {
@@ -36,13 +54,13 @@ async def make_weather_request(endpoint: str, params: dict[str, str]) -> dict[st
             response.raise_for_status()
             return response.json()
         except httpx.HTTPStatusError as e:
-            print(f"HTTP Error {e.response.status_code}: {e.response.text}")
+            print(f"WeatherAPI HTTP Error {e.response.status_code}", file=sys.stderr)
             return None
         except httpx.RequestError as e:
-            print(f"Request Error: {e}")
+            print(f"Request Error: {type(e).__name__}", file=sys.stderr)
             return None
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"Unexpected error: {type(e).__name__}", file=sys.stderr)
             return None
 
 @mcp.tool()
@@ -52,6 +70,8 @@ async def get_current_weather(city: str) -> str:
     Args:
         city: City name (e.g., "Hanoi", "Haiphong", "Danang", "Brisbane", "Sydney")
     """
+    if not city.strip():
+        return "Invalid city: provide a non-empty city name."
     params = {
         "q": city,
         "aqi": "no"
@@ -88,10 +108,15 @@ async def get_forecast(city: str, days: int = 3) -> str:
 
     Args:
         city: City name (e.g., "Hanoi", "Haiphong", "Danang", "Brisbane", "Sydney", "Melbourne")
-        days: Number of days to forecast (1-3 for free tier, max 10 for paid)
+        days: Number of days to forecast; values are clamped to 1-3.
     """
-    # Limit days to 3 for free tier
-    days = min(days, 3)
+    if not city.strip():
+        return "Invalid city: provide a non-empty city name."
+    # Giới hạn days trong khoảng 1-3 ngày cho gói miễn phí
+    if days < 1:
+        days = 1
+    elif days > 3:
+        days = 3
     
     params = {
         "q": city,
@@ -135,18 +160,12 @@ async def health_check() -> str:
     """Health check endpoint for deployment verification."""
     return "✅ Weather MCP Server is running! Ready to provide weather data for Australian cities and worldwide."
 
-print("✅ MCP server initialized with Streamable HTTP transport")
-print("🔧 Available tools: get_current_weather, get_forecast, health_check")
-
 if __name__ == "__main__":
     import sys
     
-    is_cloud_run = bool(os.getenv("PORT"))
-    is_standalone = len(sys.argv) == 1 and sys.stdin.isatty()
-    
-    if is_cloud_run or is_standalone:
-        print(f"🚀 Starting MCP server on http://0.0.0.0:{port}/mcp")
-        mcp.run(transport="streamable-http")
-    else:
+    if "--stdio" in sys.argv:
         print("Starting FastMCP server in stdio mode for local client", file=sys.stderr)
         mcp.run()
+    else:
+        print(f"Starting MCP server on http://0.0.0.0:{port}/mcp", file=sys.stderr)
+        mcp.run(transport="streamable-http")

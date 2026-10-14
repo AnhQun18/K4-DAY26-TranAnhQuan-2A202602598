@@ -1,0 +1,18 @@
+PASS import google.adk
+PASS import google.genai
+PASS import mcp
+PASS import dotenv
+PASS import httpx
+PASS API key configured (API validity checked by test_chat.py)
+PASS agent files
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\04-lab\mcp-client\.venv\Lib\site-packages\google\adk\features\_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.PLUGGABLE_AUTH is enabled.
+  check_feature_enabled()
+PASS MCP initialize, required tools and health_check
+Failed to configure mTLS using AsyncAuthorizedSession: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\04-lab\mcp-client\.venv\Lib\site-packages\google\adk\tools\mcp_tool\mcp_toolset.py:304: UserWarning: [EXPERIMENTAL] feature FeatureName._MCP_GRACEFUL_ERROR_HANDLING is enabled.
+  session = await self._mcp_session_manager.create_session(
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\04-lab\mcp-client\.venv\Lib\site-packages\google\adk\features\_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.BASE_AUTHENTICATED_TOOL is enabled.
+  check_feature_enabled()
+PASS ADK tool discovery: get_current_weather, get_forecast, health_check
+PASS agent configuration: weather_agent, model=gemini-3.5-flash-lite
+All checks passed!

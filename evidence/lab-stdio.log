@@ -1,0 +1,6 @@
+Starting FastMCP server in stdio mode for local client
+[10/14/26 15:03:38] INFO     Processing request of type           server.py:733
+                             ListToolsRequest
+PASS lab stdio initialize/list_tools/health_check without stdout pollution
+                    INFO     Processing request of type           server.py:733
+                             CallToolRequest

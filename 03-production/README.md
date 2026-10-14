@@ -165,3 +165,24 @@ versioned_client.py                     versioned_server.py
 ```
 
 Client thông minh đọc `server://info` để biết tool nào deprecated, tự chọn dùng v2 nếu có, fallback v1 nếu không.
+
+## Windows / PowerShell
+
+Từ gốc repo:
+
+```powershell
+.\.venv\Scripts\python.exe .\03-production\versioned_client.py
+.\.venv\Scripts\python.exe .\03-production\registry_client.py
+```
+
+Demo auth cần hai terminal từ gốc repo; đặt cùng `MCP_AUTH_TOKEN` nếu thay token mặc định:
+
+```powershell
+# Terminal 1
+.\.venv\Scripts\python.exe .\03-production\auth_server.py
+# Terminal 2
+.\.venv\Scripts\python.exe .\03-production\auth_client.py
+.\.venv\Scripts\python.exe .\tests\check_auth.py
+```
+
+Token thiếu/sai trả HTTP 401 trong phiên kiểm chứng. Token hợp lệ gọi được `get_weather`. Dừng auth server bằng Ctrl+C trước khi dùng ADK cổng 8000. Đây là demo dữ liệu mock với token tĩnh. `email-service` và `db-gateway` chỉ là khai báo minh họa, không có server triển khai trong repo.

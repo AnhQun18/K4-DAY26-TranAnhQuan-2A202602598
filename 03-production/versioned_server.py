@@ -15,7 +15,11 @@ Cách chạy:
 from __future__ import annotations
 
 import json
+import sys
 from datetime import datetime, timezone
+
+if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 from mcp.server.mcpserver import MCPServer
 
@@ -82,6 +86,12 @@ def get_weather_v2(
             ensure_ascii=False,
         )
 
+    if units not in ("celsius", "fahrenheit"):
+        return json.dumps(
+            {"city": city, "error": f"đơn vị không hợp lệ: {units}. Chỉ chấp nhận 'celsius' hoặc 'fahrenheit'", "api_version": "2.0"},
+            ensure_ascii=False,
+        )
+
     temp = data["temp"]
     if units == "fahrenheit":
         temp = round(temp * 9 / 5 + 32, 1)
@@ -97,7 +107,17 @@ def get_weather_v2(
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     if include_forecast:
-        result["forecast"] = data["forecast"]
+        forecast_list = []
+        for f_item in data["forecast"]:
+            f_temp = f_item["temp"]
+            if units == "fahrenheit":
+                f_temp = round(f_temp * 9 / 5 + 32, 1)
+            forecast_list.append({
+                "day": f_item["day"],
+                "temp": f_temp,
+                "condition": f_item["condition"],
+            })
+        result["forecast"] = forecast_list
 
     return json.dumps(result, ensure_ascii=False)
 

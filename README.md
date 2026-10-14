@@ -18,7 +18,7 @@ day26-mcp/
 │   ├── weather_server.py
 │   └── weather_client.py
 │
-└── 03-production/           ← Bước 3: Auth, Tool Registry, Versioning
+├── 03-production/           ← Bước 3: Auth, Tool Registry, Versioning
     ├── README.md
     ├── auth_server.py
     ├── auth_client.py
@@ -81,7 +81,7 @@ cd 03-production && python registry_client.py
 
 ## Quan hệ giữa chúng
 
-Điểm quan trọng nhất: **MCP dùng Function Calling bên dưới**. Chúng không loại trừ nhau.
+Điểm quan trọng nhất: **MCP là giao thức độc lập với model**. Ứng dụng LLM có thể kết hợp Function Calling với MCP; demo bài 02 gọi MCP trực tiếp mà không dùng LLM.
 
 ```
 User hỏi
@@ -238,4 +238,20 @@ Chi tiết + code cho cả 3 phần: xem [`03-production/README.md`](03-producti
 
 ---
 
-**Tóm lại:** Function Calling là *cơ chế model gọi công cụ*; MCP là *chuẩn để kết nối model với các công cụ đó* — và MCP thực chất dùng Function Calling làm nền tảng để hoạt động.
+**Tóm lại:** Function Calling là *cơ chế model gọi công cụ*; MCP là *chuẩn để kết nối model với các công cụ đó* — ứng dụng có thể kết hợp cả hai để điều phối công cụ.
+
+## Chạy và kiểm chứng trên Windows
+
+Dùng `.venv` gốc cho bài 01–03 (MCP v2), hai `.venv` Python 3.12 riêng trong lab 04 (MCP v1). Không cần activate PowerShell script.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe .\02-mcp-basics\weather_client.py
+.\.venv\Scripts\python.exe .\01-function-calling\weather_function_calling.py
+.\.venv\Scripts\python.exe .\03-production\versioned_client.py
+.\.venv\Scripts\python.exe .\03-production\registry_client.py
+```
+
+Bài 01–03 dùng dữ liệu mock; bài 01 cần Gemini API key. Lab 04 dùng dữ liệu WeatherAPI thật, xem [hướng dẫn local](04-lab/README.md). Auth demo và ADK cùng dùng cổng 8000, không chạy đồng thời.
+
+Tiến độ: [PLAN.md](PLAN.md). Kết quả kiểm chứng: [evidence/RESULTS.md](evidence/RESULTS.md). Minh chứng giao diện nằm trong `screenshots/`. Docker/Cloud Run không thuộc phần bàn giao lần này.

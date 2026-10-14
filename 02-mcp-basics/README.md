@@ -254,3 +254,14 @@ claude mcp add weather -- python /đường/dẫn/tới/weather_server.py
 ```
 
 Bước tiếp theo: [03-production/](../03-production/) — Auth, Tool Registry, Versioning.
+
+## Windows / PowerShell
+
+Từ gốc repo, dùng môi trường gốc cho bài 01–03:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe .\02-mcp-basics\weather_client.py
+```
+
+Dữ liệu thời tiết ở bài này là mock. Bài 01 nạp khóa Gemini từ `.env` gốc; bài 02 không cần khóa. Xem `PLAN.md` và `evidence/RESULTS.md` để kiểm tra tiến độ.

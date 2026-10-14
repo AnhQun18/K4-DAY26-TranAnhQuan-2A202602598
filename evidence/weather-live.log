@@ -1,0 +1,61 @@
+PASS get_current_weather {'city': 'Hanoi'}
+
+Current Weather for Hanoi, , Vietnam:
+
+Temperature: 34.3°C (93.7°F)
+Feels like: 36.4°C (97.5°F)
+Condition: Smoky haze
+Humidity: 42%
+Wind: 7.2 km/h (4.5 mph) SSE
+Pressure: 1012.0 mb
+UV Index: 4.8
+Visibility: 10.0 km
+
+Last updated: 2026-10-14 14:45
+
+PASS get_forecast {'city': 'Danang', 'days': 1}
+Weather Forecast for Danang, , Vietnam:
+---
+
+2026-10-14:
+High: 27.3°C (81.1°F)
+Low: 21.4°C (70.5°F)
+Condition: Fog
+Chance of Rain: 86%
+Max Wind: 7.6 km/h
+UV Index: 9.2
+
+PASS get_forecast {'city': 'Danang', 'days': 3}
+Weather Forecast for Danang, , Vietnam:
+---
+
+2026-10-14:
+High: 27.3°C (81.1°F)
+Low: 21.4°C (70.5°F)
+Condition: Fog
+Chance of Rain: 86%
+Max Wind: 7.6 km/h
+UV Index: 9.2
+
+---
+
+2026-10-15:
+High: 28.9°C (84.0°F)
+Low: 20.4°C (68.8°F)
+Condition: Fog
+Chance of Rain: 60%
+Max Wind: 7.9 km/h
+UV Index: 9.0
+
+---
+
+2026-10-16:
+High: 29.5°C (85.1°F)
+Low: 19.3°C (66.7°F)
+Condition: Sunny
+Chance of Rain: 14%
+Max Wind: 9.7 km/h
+UV Index: 10.0
+
+PASS get_current_weather {'city': ' '}
+Invalid city: provide a non-empty city name.

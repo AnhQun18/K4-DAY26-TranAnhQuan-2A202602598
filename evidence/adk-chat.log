@@ -1,0 +1,59 @@
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\04-lab\mcp-client\.venv\Lib\site-packages\google\adk\features\_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.PLUGGABLE_AUTH is enabled.
+  check_feature_enabled()
+
+==================================================
+User: Thời tiết Hà Nội hiện tại thế nào?
+==================================================
+Failed to configure mTLS using AsyncAuthorizedSession: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\04-lab\mcp-client\.venv\Lib\site-packages\google\adk\tools\mcp_tool\mcp_toolset.py:304: UserWarning: [EXPERIMENTAL] feature FeatureName._MCP_GRACEFUL_ERROR_HANDLING is enabled.
+  session = await self._mcp_session_manager.create_session(
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\04-lab\mcp-client\.venv\Lib\site-packages\google\adk\features\_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.BASE_AUTHENTICATED_TOOL is enabled.
+  check_feature_enabled()
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\04-lab\mcp-client\.venv\Lib\site-packages\google\adk\models\llm_request.py:256: UserWarning: [EXPERIMENTAL] feature FeatureName.JSON_SCHEMA_FOR_FUNC_DECL is enabled.
+  declaration = tool._get_declaration()
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+  [ADK Tool Call] -> get_current_weather({'city': 'Hanoi'})
+  [MCP Server Response] -> {'content': [{'type': 'text', 'text': '\nCurrent Weather for Hanoi, , Vietnam:\n\nTemperature: 34.3°C (93.7°F)\nFeels like: 36.4°C (97.5°F)\nCondition...
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+
+Agent: Thời tiết hiện tại ở Hà Nội:
+- **Nhiệt độ:** 34.3°C (cảm giác thực tế như 36.4°C)
+- **Tình trạng:** Khói mù (Smoky haze)
+- **Độ ẩm:** 42%
+- **Gió:** 7.2 km/h (hướng Nam-Đông Nam)
+- **Áp suất:** 1012.0 mb
+- **Chỉ số UV:** 4.8
+- **Tầm nhìn:** 10.0 km
+PASS end-to-end: get_current_weather
+
+==================================================
+User: Dự báo thời tiết Đà Nẵng 3 ngày tới
+==================================================
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+  [ADK Tool Call] -> get_forecast({'days': 3, 'city': 'Danang'})
+  [MCP Server Response] -> {'content': [{'type': 'text', 'text': 'Weather Forecast for Danang, , Vietnam:\n---\n\n2026-10-14:\nHigh: 27.3°C (81.1°F)\nLow: 21.4°C (70.5°F)\nCondi...
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+
+Agent: Dự báo thời tiết tại **Đà Nẵng** trong 3 ngày tới:
+
+* **Ngày 14/10/2026:**
+  * Nhiệt độ: Thấp nhất **21.4°C**, Cao nhất **27.3°C**
+  * Tình trạng: Sương mù (Fog)
+  * Khả năng có mưa: 86%
+  * Gió tối đa: 7.6 km/h
+  * Chỉ số UV: 9.2
+
+* **Ngày 15/10/2026:**
+  * Nhiệt độ: Thấp nhất **20.4°C**, Cao nhất **28.9°C**
+  * Tình trạng: Sương mù (Fog)
+  * Khả năng có mưa: 60%
+  * Gió tối đa: 7.9 km/h
+  * Chỉ số UV: 9.0
+
+* **Ngày 16/10/2026:**
+  * Nhiệt độ: Thấp nhất **19.3°C**, Cao nhất **29.5°C**
+  * Tình trạng: Trời nắng (Sunny)
+  * Khả năng có mưa: 14%
+  * Gió tối đa: 9.7 km/h
+  * Chỉ số UV: 10.0
+PASS end-to-end: get_forecast

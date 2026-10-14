@@ -1,0 +1,12 @@
+PASS import google.adk
+PASS import google.genai
+PASS import mcp
+PASS import dotenv
+PASS import httpx
+PASS API key configured (API validity checked by test_chat.py)
+PASS agent files
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\04-lab\mcp-client\.venv\Lib\site-packages\google\adk\features\_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.PLUGGABLE_AUTH is enabled.
+  check_feature_enabled()
+FAIL MCP connection/handshake/health (ExceptionGroup)
+PASS agent configuration: weather_agent, model=gemini-3.5-flash-lite
+Some checks failed

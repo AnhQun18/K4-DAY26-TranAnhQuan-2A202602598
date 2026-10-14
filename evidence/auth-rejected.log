@@ -1,0 +1,2 @@
+PASS missing token -> HTTP 401
+PASS invalid token -> HTTP 401

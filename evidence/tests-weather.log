@@ -1,0 +1,14 @@
+test_empty_city_does_not_send_request (test_weather.WeatherTests.test_empty_city_does_not_send_request) ... ok
+test_forecast_bounds (test_weather.WeatherTests.test_forecast_bounds) ... ok
+test_missing_key_does_not_send_request (test_weather.WeatherTests.test_missing_key_does_not_send_request) ... ERROR: WeatherAPI key not set.
+ok
+test_network_failure_is_handled (test_weather.WeatherTests.test_network_failure_is_handled) ... Request Error: ConnectError
+ok
+test_rejected_key_and_location_response (test_weather.WeatherTests.test_rejected_key_and_location_response) ... WeatherAPI HTTP Error 400
+WeatherAPI HTTP Error 403
+ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.095s
+
+OK

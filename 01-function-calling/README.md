@@ -203,3 +203,14 @@ while resp.function_calls:
 **MCP giải quyết tất cả các vấn đề trên** → xem [02-mcp-basics/](../02-mcp-basics/)
 
 Bước tiếp theo: [02-mcp-basics/](../02-mcp-basics/) — tách tool ra MCP server độc lập.
+
+## Windows / PowerShell
+
+Từ gốc repo, dùng môi trường gốc cho bài 01–03:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe .\01-function-calling\weather_function_calling.py
+```
+
+Dữ liệu thời tiết ở bài này là mock. Bài 01 nạp khóa Gemini từ `.env` gốc; bài 02 không cần khóa. Xem `PLAN.md` và `evidence/RESULTS.md` để kiểm tra tiến độ.

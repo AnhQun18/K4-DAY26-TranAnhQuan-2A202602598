@@ -1,0 +1,32 @@
+test_city_aliases (test_demo.DemoTests.test_city_aliases) ... C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\.venv\Lib\site-packages\google\genai\types.py:42: DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+  VersionedUnionType = Union[builtin_types.UnionType, _UnionGenericAlias]
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+ok
+test_invalid_tool_is_rejected (test_demo.DemoTests.test_invalid_tool_is_rejected) ... Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+ok
+  [model yêu cầu] unknown({'city': 'Hanoi'})
+test_registry_utf8_and_selection (test_demo.DemoTests.test_registry_utf8_and_selection) ... ok
+test_tool_loop_is_bounded (test_demo.DemoTests.test_tool_loop_is_bounded) ... Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+ok
+  [model yêu cầu] get_weather({'city': 'Hanoi'})
+  [app thực thi]  -> {"city": "Hanoi", "nhiệt_độ": "29°C", "thời_tiết": "trời mưa nhẹ", "độ_ẩm": "82%", "gió": {"hướng": "Đông Nam", "tốc_độ": "12 km/h"}}
+  [model yêu cầu] get_weather({'city': 'Hanoi'})
+  [app thực thi]  -> {"city": "Hanoi", "nhiệt_độ": "29°C", "thời_tiết": "trời mưa nhẹ", "độ_ẩm": "82%", "gió": {"hướng": "Đông Nam", "tốc_độ": "12 km/h"}}
+  [model yêu cầu] get_weather({'city': 'Hanoi'})
+  [app thực thi]  -> {"city": "Hanoi", "nhiệt_độ": "29°C", "thời_tiết": "trời mưa nhẹ", "độ_ẩm": "82%", "gió": {"hướng": "Đông Nam", "tốc_độ": "12 km/h"}}
+  [model yêu cầu] get_weather({'city': 'Hanoi'})
+  [app thực thi]  -> {"city": "Hanoi", "nhiệt_độ": "29°C", "thời_tiết": "trời mưa nhẹ", "độ_ẩm": "82%", "gió": {"hướng": "Đông Nam", "tốc_độ": "12 km/h"}}
+  [model yêu cầu] get_weather({'city': 'Hanoi'})
+  [app thực thi]  -> {"city": "Hanoi", "nhiệt_độ": "29°C", "thời_tiết": "trời mưa nhẹ", "độ_ẩm": "82%", "gió": {"hướng": "Đông Nam", "tốc_độ": "12 km/h"}}
+  [model yêu cầu] get_weather({'city': 'Hanoi'})
+  [app thực thi]  -> {"city": "Hanoi", "nhiệt_độ": "29°C", "thời_tiết": "trời mưa nhẹ", "độ_ẩm": "82%", "gió": {"hướng": "Đông Nam", "tốc_độ": "12 km/h"}}
+  [model yêu cầu] get_weather({'city': 'Hanoi'})
+  [app thực thi]  -> {"city": "Hanoi", "nhiệt_độ": "29°C", "thời_tiết": "trời mưa nhẹ", "độ_ẩm": "82%", "gió": {"hướng": "Đông Nam", "tốc_độ": "12 km/h"}}
+  [model yêu cầu] get_weather({'city': 'Hanoi'})
+  [app thực thi]  -> {"city": "Hanoi", "nhiệt_độ": "29°C", "thời_tiết": "trời mưa nhẹ", "độ_ẩm": "82%", "gió": {"hướng": "Đông Nam", "tốc_độ": "12 km/h"}}
+test_versioning_and_units (test_demo.DemoTests.test_versioning_and_units) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 4.526s
+
+OK

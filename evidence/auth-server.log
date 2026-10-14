@@ -1,0 +1,27 @@
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\03-production\auth_server.py:54: MCPDeprecationWarning: `AuthSettings.validate_token_resource` is not set, so bearer tokens are not checked against `resource_server_url`; it will default to True in 3.0 when `resource_server_url` is set. Set it to True to have the server refuse tokens issued for another resource, or to False if your TokenVerifier validates the token's audience itself.
+  auth=AuthSettings(
+C:\Users\admin\Documents\Lab\K4-DAY26-TranAnhQuan-2A202602598\.venv\Lib\site-packages\mcp\server\mcpserver\server.py:188: MCPDeprecationWarning: `AuthSettings.validate_token_resource` is not set, so bearer tokens are not checked against `resource_server_url`; it will default to True in 3.0 when `resource_server_url` is set. Set it to True to have the server refuse tokens issued for another resource, or to False if your TokenVerifier validates the token's audience itself.
+  self.settings = Settings(
+INFO:     Started server process [3000]
+INFO:     Waiting for application startup.
+[10/14/26 14:52:58] INFO     StreamableHTTP      streamable_http_manager.py:162
+                             session manager
+                             started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+[10/14/26 14:53:59] INFO     Created new         streamable_http_manager.py:325
+                             transport with
+                             session ID:
+                             f44515ac91274785bbc
+                             4fd917ce16b4c
+INFO:     127.0.0.1:51500 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51506 - "POST /mcp HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:51507 - "GET /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51511 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51513 - "POST /mcp HTTP/1.1" 200 OK
+[10/14/26 14:54:00] INFO     Terminating session:        streamable_http.py:855
+                             f44515ac91274785bbc4fd917ce
+                             16b4c
+INFO:     127.0.0.1:51518 - "DELETE /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51525 - "POST /mcp HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:51527 - "POST /mcp HTTP/1.1" 401 Unauthorized

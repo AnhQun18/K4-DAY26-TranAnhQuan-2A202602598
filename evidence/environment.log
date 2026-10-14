@@ -1,0 +1,13 @@
+Environment verification — 2026-10-14
+.venv/Scripts/python.exe
+3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]
+{'mcp': '2.3.0', 'google-genai': '2.30.1', 'python-dotenv': '1.2.4', 'httpx': '0.28.1'}
+No broken requirements found.
+04-lab/mcp-server/.venv/Scripts/python.exe
+3.12.15 (main, Oct  9 2026, 15:21:55) [MSC v.1944 64 bit (AMD64)]
+{'mcp': '1.28.1', 'python-dotenv': '1.2.2', 'httpx': '0.28.1', 'fastmcp': '3.4.2'}
+No broken requirements found.
+04-lab/mcp-client/.venv/Scripts/python.exe
+3.12.15 (main, Oct  9 2026, 15:21:55) [MSC v.1944 64 bit (AMD64)]
+{'mcp': '1.28.1', 'google-adk': '2.3.0', 'google-genai': '2.10.0', 'python-dotenv': '1.2.2', 'httpx': '0.28.1', 'fastmcp': '3.4.2'}
+No broken requirements found.

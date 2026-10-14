@@ -1,90 +1,73 @@
-# Lab 04 — Weather Agent with Remote MCP Server
+# Lab 04 — Weather Agent local
 
-A weather agent built with Google ADK that connects to an MCP server via Streamable HTTP transport.
+Luồng: người dùng → ADK/Gemini → MCP HTTP → WeatherAPI → câu trả lời.
+Server cung cấp `get_current_weather(city)`, `get_forecast(city, days)` và `health_check()`.
+Forecast giới hạn đầu vào về 1–3 ngày; health chỉ xác nhận MCP hoạt động, không xác thực WeatherAPI.
 
-## Architecture
+## Chuẩn bị trên Windows / PowerShell
 
-```
-┌─────────────────┐   Streamable HTTP    ┌─────────────────┐      REST       ┌─────────────────┐
-│   ADK Agent     │ ──────────────────── │   MCP Server    │ ─────────────── │  WeatherAPI.com │
-│  (mcp-client)   │   localhost:8085/mcp │  (mcp-server)   │                 │                 │
-└─────────────────┘                      └─────────────────┘                 └─────────────────┘
-```
+Dùng Python 3.12 và hai môi trường riêng cho server/client. Bài 01–03 dùng môi trường gốc với MCP v2; lab dùng MCP v1 theo lockfile. Không cài chồng hai bộ dependency.
 
-## Tools
+Từ gốc repo, nếu chưa có cấu hình:
 
-| Tool | Description |
-|------|-------------|
-| `get_current_weather(city)` | Get current weather conditions for a city |
-| `get_forecast(city, days)` | Get weather forecast (1–3 days) |
-| `health_check()` | Verify server is running |
-
-## ADK làm gì trong Lab này?
-
-ADK (Agent Development Kit) đóng vai trò **MCP Client** 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│  1. KẾT NỐI tới MCP Server qua Streamable HTTP                  │
-│     StreamableHTTPConnectionParams(url="localhost:8085/mcp")    │
-│                                                                 │
-│  2. KHÁM PHÁ tools tự động (list_tools)                         │
-│     McpToolset → tự hỏi server "anh có tool gì?"                │
-│     → nhận về: get_current_weather, get_forecast, health_check  │
-│                                                                 │
-│  3. TRUYỀN tools cho LLM (Gemini)                               │
-│     Agent(model="gemini-2.5-flash", tools=[weather_tools])      │
-│     → Gemini biết nó có thể gọi 3 tools trên                    │
-│                                                                 │
-│  4. ĐIỀU PHỐI vòng lặp Function Calling                         │
-│     User hỏi → Gemini chọn tool → ADK gọi MCP Server            │
-│     → nhận kết quả → đưa lại cho Gemini tổng hợp                │
-│                                                                 │
-│  5. CUNG CẤP giao diện web (adk web)                            │
-│     → http://localhost:8000 để chat với agent                   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+```powershell
+Copy-Item .env.example .env
 ```
 
-So với bài 02 (viết client thủ công bằng `mcp.ClientSession`), ADK giúp bạn **không phải viết vòng lặp function calling thủ công** nữa. Toàn bộ luồng list_tools → model quyết định → call_tool → model tổng hợp được ADK xử lý tự động.
+Điền `GOOGLE_API_KEY` và `WEATHERAPI_KEY` trong `.env` bằng trình soạn thảo; dùng cùng một khóa nếu đặt thêm `GEMINI_API_KEY`. Biến môi trường của terminal được ưu tiên, tiếp theo là `.env` của từng thành phần rồi `.env` gốc. Không commit khóa.
 
-## Setup
+Cài dependency một lần trong từng thư mục:
 
-### 1. MCP Server
-
-```bash
-cd mcp-server
-uv sync
-
-# Set your WeatherAPI key (get one free at https://weatherapi.com)
-export WEATHERAPI_KEY="your_weatherapi_key"
-
-# Start the server (runs on port 8085 by default)
-uv run python weather.py
+```powershell
+Set-Location .\04-lab\mcp-server
+uv sync --locked --python 3.12
+Set-Location ..\mcp-client
+uv sync --locked --python 3.12
 ```
 
-The server will be available at `http://localhost:8085/mcp`.
+## Chạy theo thứ tự
 
-### 2. ADK Agent (Client)
+Terminal 1, từ gốc repo:
 
-```bash
-cd mcp-client
-uv sync
-
-# Create .env file with your Gemini API key
-echo "GOOGLE_API_KEY=your_gemini_api_key" > .env
-
-# Start ADK web interface
-uv run adk web
+```powershell
+Set-Location .\04-lab\mcp-server
+.\.venv\Scripts\python.exe weather.py
 ```
 
-Open http://localhost:8000 in your browser, select `weather_agent`, and ask about the weather.
+Server mặc định HTTP tại `http://localhost:8085/mcp`; đặt `PORT` nếu cần đổi cổng. Chỉ dùng `--stdio` khi kết nối bằng client stdio.
 
-## Configuration
+Terminal 2 mới, từ gốc repo:
 
-| Variable | Where | Description |
-|----------|-------|-------------|
-| `WEATHERAPI_KEY` | mcp-server | API key from weatherapi.com |
-| `GOOGLE_API_KEY` | mcp-client/.env | Gemini API key |
-| `PORT` | mcp-server (env) | Override server port (default: 8085) |
-| `MCP_SERVER_URL` | mcp-client/.env | MCP endpoint the agent connects to (default: `http://localhost:8085/mcp`; set to your Cloud Run URL + `/mcp` when deployed) |
+```powershell
+Set-Location .\04-lab\mcp-client
+.\.venv\Scripts\python.exe verify_setup.py
+.\.venv\Scripts\python.exe check_weather.py
+.\.venv\Scripts\python.exe test_chat.py
+.\.venv\Scripts\adk.exe web
+```
+
+Mở http://localhost:8000, chọn `weather_agent`, hỏi thời tiết Hà Nội và dự báo Đà Nẵng ba ngày. Kiểm tra Events có tool call, tool response và câu trả lời cuối. Model hiện cấu hình `gemini-3.5-flash-lite`.
+
+`verify_setup.py` kiểm tra cấu hình, dependency, MCP initialize/list_tools/health_check và khám phá tool qua ADK. Chỉ `check_weather.py` kiểm chứng WeatherAPI thật; `test_chat.py` kiểm chứng thêm Gemini. Import agent thành công chưa chứng minh kết nối mạng.
+
+## Kiểm tra lỗi
+
+Trong terminal client riêng:
+
+```powershell
+$env:MCP_SERVER_URL='http://localhost:8085/wrong-path'
+.\.venv\Scripts\python.exe verify_setup.py
+# Phải exit 1
+Remove-Item Env:MCP_SERVER_URL
+```
+
+Dừng server bằng Ctrl+C và chạy verify lần nữa: phải exit 1. Khởi động lại server, verify phải exit 0. Biến trong terminal cũ không tự xuất hiện ở terminal mới.
+
+404 thường là sai endpoint; lỗi kết nối thường do server dừng/sai cổng. Không suy ra trạng thái MCP từ một HTTP GET đơn lẻ. Dừng auth demo trước khi mở ADK vì cùng dùng cổng 8000.
+
+Nếu import `pydantic_core` thất bại, kiểm tra `python --version` và tái đồng bộ môi trường bằng Python 3.12. Không dùng môi trường Python 3.14 chứa wheel cp312.
+
+## Minh chứng và phạm vi
+
+Ảnh đã lưu ở `screenshots/`, log kiểm chứng ở `evidence/`; xem `PLAN.md` và `evidence/RESULTS.md` tại gốc repo.
+Docker/Cloud Run thuộc phần mở rộng và không thực hiện trong lần bàn giao này.
